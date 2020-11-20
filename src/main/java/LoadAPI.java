@@ -44,7 +44,7 @@ public class LoadAPI {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = rd.readLine()) != null) {
-                sb.append(line);
+                sb.append(line + "\n");
             }
             rd.close();
             conn.disconnect();
