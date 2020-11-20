@@ -29,7 +29,16 @@ public class SqlTest
         }catch(SQLException sqlEX){
             System.out.println(sqlEX);
         }
-        System.out.println("Creating College, Student, Apply relations");
+        System.out.println("Drop all relations!");
+        try {
+            String sql = "drop table universities CASCADE;\n"+"drop table university_majors;\n"+"drop table charts;\n"+"drop table legends CASCADE;\n"+"drop table majors;\n";
+            st.executeUpdate(sql);
+        } catch (SQLException sqlEX) {
+
+            //System.out.println("hello");
+            System.out.println(sqlEX);
+        }
+        System.out.println("Create relations");
         try {
 
             String sql = "create table charts(id bigint, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer, satisfaction decimal, employment_rate decimal, applicant_rate decimal);\n" +
