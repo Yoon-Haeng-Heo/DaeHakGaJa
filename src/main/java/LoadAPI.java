@@ -11,6 +11,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,9 +59,22 @@ public class LoadAPI {
             conn.disconnect();
             String result = sb.toString();
             System.out.println(result); // Debug print line
-
-//            JSONParser parser = new JSONParser();
-//            JSONObject obj = (JSONObject) parser.parse(result);
+            try {
+                JSONParser parser = new JSONParser();
+                JSONObject obj = (JSONObject) parser.parse(result);
+                JSONObject dataSearchObj = (JSONObject) obj.get("dataSearch");
+                JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
+                JSONObject contentObj = (JSONObject) contentArray.get(0);
+                JSONArray univArray = (JSONArray) contentObj.get("university");
+                for(int a=0; a< univArray.size(); a++){
+                    JSONObject univObject = (JSONObject) univArray.get(a);
+                    System.out.println("area "+univObject.get("area"));
+                    System.out.println("majorName " + univObject.get("majorName"));
+                    System.out.println("schoolName "+ univObject.get("schoolName"));
+                }
+            }catch(ParseException e){
+                e.printStackTrace();
+            }
 //
 //            JSONObject parse_response = (JSONObject) obj.get("response");
 //            JSONObject parse_body = (JSONObject) parse_response.get("body");
@@ -71,7 +86,6 @@ public class LoadAPI {
 //            for(int i = 0; i < parse_item.size(); i++) {
 //
 //            }
-
 
         }catch(IOException ex){
             System.out.println(ex);
