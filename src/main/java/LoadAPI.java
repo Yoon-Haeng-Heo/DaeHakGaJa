@@ -17,6 +17,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 public class LoadAPI {
     public LoadAPI(){
         try {
@@ -24,7 +31,7 @@ public class LoadAPI {
             urlBuilder.append("?" + URLEncoder.encode("apiKey", "UTF-8") + "=" + URLEncoder.encode("327f658d87b31c1ea2c7d1dd130a05a7", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("svcType", "UTF-8") + "=" + URLEncoder.encode("api", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("svcCode", "UTF-8") + "=" + URLEncoder.encode("MAJOR_VIEW", "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("contentType", "UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("gubun", "UTF-8") + "=" + URLEncoder.encode("univ_list", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("univSe", "UTF-8") + "=" + URLEncoder.encode("univ", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("subject", "UTF-8") + "=" + URLEncoder.encode("100394", "UTF-8"));
@@ -44,13 +51,33 @@ public class LoadAPI {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = rd.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line);
             }
             rd.close();
             conn.disconnect();
-            System.out.println(sb.toString());
+            String result = sb.toString();
+            System.out.println(result); // Debug print line
+
+//            JSONParser parser = new JSONParser();
+//            JSONObject obj = (JSONObject) parser.parse(result);
+//
+//            JSONObject parse_response = (JSONObject) obj.get("response");
+//            JSONObject parse_body = (JSONObject) parse_response.get("body");
+//            JSONObject parse_items = (JSONObject) parse_body.get("items");
+//            JSONArray parse_item = (JSONArray) parse_items.get("item");
+//            String category;
+//            JSONObject weather;
+//
+//            for(int i = 0; i < parse_item.size(); i++) {
+//
+//            }
+
+
         }catch(IOException ex){
             System.out.println(ex);
         }
     }
 }
+
+
+
