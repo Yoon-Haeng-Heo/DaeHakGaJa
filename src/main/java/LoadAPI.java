@@ -7,13 +7,16 @@ import java.io.IOException;
 
 public class LoadAPI {
     public static void main(String[] args) throws IOException {
-        StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=327f658d87b31c1ea2c7d1dd130a05a7&svcType=api&svcCode=MAJOR_VIEW&contentType=xml&gubun=univ_list&univSe=univ&subject=100394&majorSeq=290"); /*URL*/
-//        urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=서비스키"); /*Service Key*/
-//        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
-//        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
-//        urlBuilder.append("&" + URLEncoder.encode("stationName","UTF-8") + "=" + URLEncoder.encode("수내동", "UTF-8")); /*측정소 이름*/
-//        urlBuilder.append("&" + URLEncoder.encode("dataTerm","UTF-8") + "=" + URLEncoder.encode("DAILY", "UTF-8")); /*요청 데이터기간 (하루 : DAILY, 한달 : MONTH, 3달 : 3MONTH)*/
-//        urlBuilder.append("&" + URLEncoder.encode("ver","UTF-8") + "=" + URLEncoder.encode("1.3", "UTF-8")); /*버전별 상세 결과 참고문서 참조*/
+        StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("apiKey","UTF-8") + "=" + URLEncoder.encode("327f658d87b31c1ea2c7d1dd130a05a7", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("svcType","UTF-8") + "=" + URLEncoder.encode("api", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("svcCode","UTF-8") + "=" + URLEncoder.encode("MAJOR_VIEW", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("contentType","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("gubun","UTF-8") + "=" + URLEncoder.encode("univ_list", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("univSe","UTF-8") + "=" + URLEncoder.encode("univ", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("subject","UTF-8") + "=" + URLEncoder.encode("100394", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("majorSeq","UTF-8") + "=" + URLEncoder.encode("290", "UTF-8"));
+
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
