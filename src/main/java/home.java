@@ -4,9 +4,9 @@ public class home {
     String password = "";
 
     public home(){
-        this.url = "jdbc:postgresql://localhost:5432/daehakgaja_dev";
-        this.user = "haeng";
-        this.password = "dbsgod4574!";
+        this.url = "jdbc:postgresql://localhost:5433/daehakgaja_dev";
+        this.user = "oohyun";
+        this.password = "test123";
     }
     public String getUrl() {
         return this.url;
