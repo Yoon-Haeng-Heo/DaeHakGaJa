@@ -6,6 +6,7 @@ public class SqlTest
     public static void main(String[] args) throws SQLException
     {
         LoadAPI api = new LoadAPI();
+        home h = new home();
         Connection conn = null;
         Statement st = null;
         ResultSet rs = null;
@@ -15,12 +16,9 @@ public class SqlTest
         System.out.println("SQL Programming Test");
 
         System.out.println("Connecting PostgreSQL database");
-        String url = "jdbc:postgresql://localhost:5432/daehakgaja_dev";
-        String user = "haeng";
-        String password = "dbsgod4574!";
         int cnt = 0;
         try {
-            conn = DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(h.getUrl(), h.getUser(),h.getPassword());
             st = conn.createStatement();
             rs = st.executeQuery("SELECT VERSION()");
 
