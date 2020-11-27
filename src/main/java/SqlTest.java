@@ -6,7 +6,7 @@ public class SqlTest
 {
     public static void main(String[] args) throws SQLException
     {
-        LoadAPI api = new LoadAPI();
+        LoadAPI api = new LoadAPI("100394","290");
         home h = new home();
 
         try {
@@ -56,8 +56,8 @@ public class SqlTest
             System.out.println("Inserting tuples to Chart, Legend, Major, University");
 
 //            System.out.println(api.getJa());
-            for(int index = 0; index < api.getJa().size(); index++) {
-                JSONObject univObject = (JSONObject) api.getJa().get(index);
+            for(int index = 0; index < api.getUnivArray().size(); index++) {
+                JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
                 st.executeUpdate("insert into University values('"+(index+1)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
             }
 
