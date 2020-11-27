@@ -81,9 +81,9 @@ public class LoadAPI {
                 mainSubject = (JSONArray) contentObj.get("main_subject");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
-                    System.out.println("area "+univObject.get("area"));
-                    System.out.println("majorName " + univObject.get("majorName"));
-                    System.out.println("schoolName "+ univObject.get("schoolName"));
+//                    System.out.println("area "+univObject.get("area"));
+//                    System.out.println("majorName " + univObject.get("majorName"));
+//                    System.out.println("schoolName "+ univObject.get("schoolName"));
                 }
             }catch(ParseException e){
                 e.printStackTrace();

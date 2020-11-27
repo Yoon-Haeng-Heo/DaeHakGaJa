@@ -62,6 +62,15 @@ public class SqlTest
                 st.executeUpdate("insert into university_major values('"+(um_index++)+"', '"+(index+1)+"', '"+"290"+"')");
             }
 
+            System.out.println("university done");
+
+//            st.executeUpdate("insert into major values('1', '소프트웨어학과','"+api.getSummary()+"','"+api.getMainSubject()+"', '"+api.getJob()+"', '1', '"+api.getQualification()+"')");
+
+            st.executeUpdate("insert into major (name, summary, job) values('소프트웨어', '"+api.getSummary()+"', '"+api.getJob()+"')");
+            System.out.println(api.getMainSubject());
+            System.out.println(api.getMainSubject());
+            System.out.println(api.getMainSubject());
+
             System.out.println("All done.");
 
         } catch (SQLException sqlEX) {
