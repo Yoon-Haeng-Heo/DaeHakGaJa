@@ -27,6 +27,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class LoadAPI {
+    JSONObject jo = null;
     public LoadAPI(){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -68,6 +69,7 @@ public class LoadAPI {
                 JSONArray univArray = (JSONArray) contentObj.get("university");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
+                    jo = univObject;
                     System.out.println("area "+univObject.get("area"));
                     System.out.println("majorName " + univObject.get("majorName"));
                     System.out.println("schoolName "+ univObject.get("schoolName"));
@@ -75,21 +77,15 @@ public class LoadAPI {
             }catch(ParseException e){
                 e.printStackTrace();
             }
-//
-//            JSONObject parse_response = (JSONObject) obj.get("response");
-//            JSONObject parse_body = (JSONObject) parse_response.get("body");
-//            JSONObject parse_items = (JSONObject) parse_body.get("items");
-//            JSONArray parse_item = (JSONArray) parse_items.get("item");
-//            String category;
-//            JSONObject weather;
-//
-//            for(int i = 0; i < parse_item.size(); i++) {
-//
-//            }
-
         }catch(IOException ex){
             System.out.println(ex);
         }
+    }
+    public JSONObject getJo() {
+        return jo;
+    }
+    public String getMajor(){
+        return (String) jo.get("majorName");
     }
 }
 

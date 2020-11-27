@@ -14,7 +14,7 @@ public class SqlTest
 
         Scanner scan = new Scanner(System.in);
         System.out.println("SQL Programming Test");
-
+        System.out.println("#####################################"+api.getMajor());
         System.out.println("Connecting PostgreSQL database");
         int cnt = 0;
         try {
