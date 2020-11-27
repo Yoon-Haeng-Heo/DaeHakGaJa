@@ -54,11 +54,12 @@ public class SqlTest
             st.executeUpdate(sql);
 
             System.out.println("Inserting tuples to Chart, Legend, Major, University");
-
+            int um_index = 1;
 //            System.out.println(api.getJa());
-            for(int index = 0; index < api.getUnivArray().size(); index++) {
+            for (int index = 0; index < api.getUnivArray().size(); index++) {
                 JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
-                st.executeUpdate("insert into University values('"+(index+1)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
+                st.executeUpdate("insert into university values('"+(index+1)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
+                st.executeUpdate("insert into university_major values('"+(um_index++)+"', '"+(index+1)+"', '"+"290"+"')");
             }
 
             System.out.println("All done.");
