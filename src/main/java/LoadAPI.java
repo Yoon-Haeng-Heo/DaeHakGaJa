@@ -28,6 +28,7 @@ import org.json.simple.parser.JSONParser;
 
 public class LoadAPI {
     JSONObject jo = null;
+    JSONArray ja = null;
     public LoadAPI(){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -66,10 +67,11 @@ public class LoadAPI {
                 JSONObject dataSearchObj = (JSONObject) obj.get("dataSearch");
                 JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
                 JSONObject contentObj = (JSONObject) contentArray.get(0);
+                //jo = contentObj;
                 JSONArray univArray = (JSONArray) contentObj.get("university");
+                ja = univArray;
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
-                    jo = univObject;
                     System.out.println("area "+univObject.get("area"));
                     System.out.println("majorName " + univObject.get("majorName"));
                     System.out.println("schoolName "+ univObject.get("schoolName"));
@@ -84,8 +86,8 @@ public class LoadAPI {
     public JSONObject getJo() {
         return jo;
     }
-    public String getMajor(){
-        return (String) jo.get("majorName");
+    public JSONArray getJa() {
+        return ja;
     }
 }
 
