@@ -29,7 +29,13 @@ import org.json.simple.parser.JSONParser;
 public class LoadAPI {
     JSONObject jo = null;
     JSONArray ja = null;
-    public LoadAPI(){
+    JSONArray univArray = null;
+    JSONArray mainSubject = null;
+    String summary = "";
+    String job = "";
+    String qualification = "";
+    String majorSeq = "";
+    public LoadAPI(String subject, String majorSeq){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
             urlBuilder.append("?" + URLEncoder.encode("apiKey", "UTF-8") + "=" + URLEncoder.encode("327f658d87b31c1ea2c7d1dd130a05a7", "UTF-8"));
@@ -38,8 +44,8 @@ public class LoadAPI {
             urlBuilder.append("&" + URLEncoder.encode("contentType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("gubun", "UTF-8") + "=" + URLEncoder.encode("univ_list", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("univSe", "UTF-8") + "=" + URLEncoder.encode("univ", "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("subject", "UTF-8") + "=" + URLEncoder.encode("100394", "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("majorSeq", "UTF-8") + "=" + URLEncoder.encode("290", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("subject", "UTF-8") + "=" + URLEncoder.encode(subject, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("majorSeq", "UTF-8") + "=" + URLEncoder.encode(majorSeq, "UTF-8"));
 
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -54,7 +60,7 @@ public class LoadAPI {
             }
             StringBuilder sb = new StringBuilder();
             String line;
-            while ((line = rd.readLine()) != null) {
+            while ((line = rd.readLine()) != null){
                 sb.append(line);
             }
             rd.close();
@@ -68,8 +74,11 @@ public class LoadAPI {
                 JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
                 JSONObject contentObj = (JSONObject) contentArray.get(0);
                 //jo = contentObj;
-                JSONArray univArray = (JSONArray) contentObj.get("university");
-                ja = univArray;
+                summary = (String) contentObj.get("summary");
+                job = (String) contentObj.get("job");
+                qualification = (String) contentObj.get("qualifications");
+                univArray = (JSONArray) contentObj.get("university");
+                mainSubject = (JSONArray) contentObj.get("main_subject");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
                     System.out.println("area "+univObject.get("area"));
@@ -86,8 +95,23 @@ public class LoadAPI {
     public JSONObject getJo() {
         return jo;
     }
-    public JSONArray getJa() {
-        return ja;
+    public JSONArray getUnivArray() {
+        return univArray;
+    }
+    public String getSummary(){
+        return summary;
+    }
+    public JSONArray getMainSubject(){
+        return mainSubject;
+    }
+    public String getJob() {
+        return job;
+    }
+    public String getQualification() {
+        return qualification;
+    }
+    public String getMajorSeq() {
+        return majorSeq;
     }
 }
 

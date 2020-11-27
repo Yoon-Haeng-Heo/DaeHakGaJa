@@ -5,7 +5,7 @@ public class SqlTest
 {
     public static void main(String[] args) throws SQLException
     {
-        LoadAPI api = new LoadAPI();
+        LoadAPI api = new LoadAPI("100394","290");
         home h = new home();
         Connection conn = null;
         Statement st = null;
@@ -14,7 +14,6 @@ public class SqlTest
 
         Scanner scan = new Scanner(System.in);
         System.out.println("SQL Programming Test");
-        System.out.println("#####################################"+api.getMajor());
         System.out.println("Connecting PostgreSQL database");
         int cnt = 0;
         try {
