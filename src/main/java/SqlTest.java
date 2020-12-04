@@ -68,33 +68,15 @@ public class SqlTest
                 String seq = Arrays.toString(arr);
                 seq = seq.substring(1, seq.length()-1);
                 seq = "{"+seq+"}";
-                System.out.println(seq);
+//                System.out.println(seq);
                 sql = "insert into legend values('"+subjectArr[a]+"' , '"+subjectName[a]+"', '"+ seq +"');";
                 st.executeUpdate(sql);
 
             }
-//            majorAPI = new LoadMajorAPI("100394");
-//            ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
-//            String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
-//            String seq = Arrays.toString(arr);
-//            seq = seq.substring(1, seq.length()-1);
-//            seq = "{"+seq+"}";
-//            System.out.println(seq);
-//
-//            sql = "insert into legend values('100391', '인문계열', '{29, 48, 56, 10145, 69, 93, 10053, 122, 124, 132, 134, 163, 164, 165, 166, 169, 10030, 10031, 179, 188}');\n" +
-//                    "insert into legend values('100392', '사회계열', '{8, 22, 10139, 23, 24, 25, 26, 27, 45, 46, 50, 54, 10141, 10143, 70, 10148, 10007, 74, 373, 10026}');\n" +
-//                    "insert into legend values('100393', '교육계열', '{10006, 44, 57, 58, 59, 68, 32, 108, 123, 174, 183, 225, 238, 263, 299, 10033, 331, 346, 350, 365}');\n" +
-//                    "insert into legend values('100394', '공학계열', '{16, 17, 18, 20, 21, 30, 35, 36, 55, 10142, 61, 10147, 10142, 61, 10147, 10038, 79, 85, 86, 87, 88, 89, 290}');\n" +
-//                    "insert into legend values('100395', '자연계열', '{7, 10144, 10146, 96, 105, 106, 111, 126, 10120, 177, 190, 245, 260, 261, 262, 10048, 265, 267, 296}');\n" +
-//                    "insert into legend values('100396', '의약계열', '{9, 10, 43, 175, 176, 196, 10012, 210, 215, 255, 288, 341, 10016, 10046, 10045, 399, 10014, 402, 404, 405}');\n" +
-//                    "insert into legend values('100397', '예체능계열', '{12, 11, 28, 10041, 33, 34, 37, 38, 39, 41, 49, 51, 10140, 67, 77, 78, 94, 113, 114, 120}');";
-//
-//           st.executeUpdate(sql);
 
             rs = st.executeQuery("select * from Legend;");
 
             while(rs.next()) {
-                System.out.println("loop start!!");
                 String id = rs.getString(1);
                 String name = rs.getString(2);
                 String array = rs.getString(3);
@@ -102,50 +84,45 @@ public class SqlTest
                 String[] majorArr = array.split(",");
                 for(String majorSeq : majorArr){
                     System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
-//                    api = new LoadAPI(id, majorSeq);
-                }
-            }
+                    api = new LoadAPI(id, majorSeq);
 
-            // load api
-            api = new LoadAPI("100394","290");
+                    // insert major
+                    System.out.println("Inserting tuples to Major");
+                    int um_index = 1;
+                    for (int index = 0; index < api.getUnivArray().size(); index++) {
+                        JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
+                        st.executeUpdate("insert into university values('"+(index+1)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
+                        st.executeUpdate("insert into university_major values('"+(um_index++)+"', '"+(index+1)+"', '"+(majorSeq)+"')");
+                    }
 
-            // insert major
-            System.out.println("Inserting tuples to Major");
-            int um_index = 1;
-//            System.out.println(api.getJa());
-            for (int index = 0; index < api.getUnivArray().size(); index++) {
-                JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
-                st.executeUpdate("insert into university values('"+(index+1)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
-                st.executeUpdate("insert into university_major values('"+(um_index++)+"', '"+(index+1)+"', '"+"290"+"')");
-            }
+                    System.out.println("university done");
 
-            System.out.println("university done");
+                    System.out.println("summary ----------");
+                    System.out.println(api.getSummary());
 
-            System.out.println("summary ----------");
-            System.out.println(api.getSummary());
+                    System.out.println("job ----------");
+                    System.out.println(api.getJob());
 
-            System.out.println("job ----------");
-            System.out.println(api.getJob());
+                    System.out.println("qualification ----------");
+                    System.out.println(api.getQualification());
 
-            System.out.println("qualification ----------");
-            System.out.println(api.getQualification());
+                    System.out.println("univarray ----------");
+                    System.out.println(api.getUnivArray());
 
-            System.out.println("univarray ----------");
-            System.out.println(api.getUnivArray());
+                    System.out.println("mainsubject ----------");
+                    System.out.println(api.getMainSubject());
 
-            System.out.println("mainsubject ----------");
-            System.out.println(api.getMainSubject());
+                    System.out.println("majorid ----------");
+                    System.out.println(api.getMajorSeq());
 
-            System.out.println("majorid ----------");
-            System.out.println(api.getMajorSeq());
+                    System.out.println("majorSeq --------");
+                    System.out.println(api.getMajorName());
 
-            System.out.println("majorSeq --------");
-            System.out.println(api.getMajorName());
-
-            System.out.println("legend_id");
-            System.out.println(api.getLegendId());
+                    System.out.println("legend_id");
+                    System.out.println(api.getLegendId());
 
 //            st.executeUpdate("insert into major values('1', '소프트웨어학과','"+api.getSummary()+"','"+api.getMainSubject()+"', '"+api.getJob()+"', '1', '"+api.getQualification()+"')");
+
             // "create table major(id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
 
             st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
@@ -155,6 +132,14 @@ public class SqlTest
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
+                    // "create table major(id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
+
+                }
+            }
+
+            // load api
+//            api = new LoadAPI("100394","290");
+
 
             System.out.println("All done.");
 
