@@ -58,7 +58,7 @@ public class LoadAPI {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-type", "application/json");
-            System.out.println("Response code: " + conn.getResponseCode());
+//            System.out.println("Response code: " + conn.getResponseCode());
             BufferedReader rd;
             if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
                 rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -73,7 +73,7 @@ public class LoadAPI {
             rd.close();
             conn.disconnect();
             String result = sb.toString();
-            System.out.println(result); // Debug print line
+//            System.out.println(result); // Debug print line
             try {
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(result);
@@ -103,9 +103,9 @@ public class LoadAPI {
                 mainSubject = (JSONArray) contentObj.get("main_subject");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
-                    System.out.println("area "+univObject.get("area"));
-                    System.out.println("majorName " + univObject.get("majorName"));
-                    System.out.println("schoolName "+ univObject.get("schoolName"));
+//                    System.out.println("area "+univObject.get("area"));
+//                    System.out.println("majorName " + univObject.get("majorName"));
+//                    System.out.println("schoolName "+ univObject.get("schoolName"));
                 }
             }catch(ParseException e){
                 e.printStackTrace();
