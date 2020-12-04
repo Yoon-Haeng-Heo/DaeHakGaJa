@@ -65,6 +65,16 @@ public class SqlTest
 
            st.executeUpdate(sql);
 
+            rs = st.executeQuery("select * from Legend;");
+
+            while(rs.next()) {
+                String id = rs.getString(1);
+                String name = rs.getString(2);
+                String majorSeq = rs.getString(3);
+
+                System.out.println(majorSeq);
+            }
+
             // load api
             LoadAPI api = new LoadAPI("100394","290");
 
