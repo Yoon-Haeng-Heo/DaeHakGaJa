@@ -82,7 +82,7 @@ public class LoadAPI {
                 JSONObject dataSearchObj = (JSONObject) obj.get("dataSearch");
                 JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
                 JSONObject contentObj = (JSONObject) contentArray.get(0);
-
+                this.majorSeq = majorSeq;
                 legend_id = Integer.parseInt(subject);
                 // Chart table의 컬럼
                 enter_field = (JSONArray) contentObj.get("enter_field");

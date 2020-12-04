@@ -1,6 +1,7 @@
 import org.json.simple.JSONObject;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 public class SqlTest
 {
@@ -8,7 +9,7 @@ public class SqlTest
     {
         home h = new home();
         LoadAPI api;
-
+        LoadMajorAPI majorAPI = new LoadMajorAPI("100394");
         try {
             Connection conn = null;
             Statement st = null;
@@ -23,7 +24,15 @@ public class SqlTest
             rs = st.executeQuery("SELECT VERSION()");
 
             if (rs.next()) System.out.println(rs.getString(1));
+            ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
+            for(int i=0;i<majorAPI.getMajorSeqArr().size();i++){
+                System.out.println(majorAPI.getMajorSeqArr().get(i));
+            }
+            String[] array = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
 
+//            for(String str : array){
+//                System.out.println(str);
+//            }
             System.out.println("Drop all relations!");
 
             String sql = "drop table university CASCADE;\n" + "drop table chart;\n" + "drop table legend CASCADE;\n" + "drop table major;\n" + "drop table university_major;";
@@ -77,7 +86,7 @@ public class SqlTest
                 String[] majorArr = array.split(",");
                 for(String majorSeq : majorArr){
                     System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
-//                    api = new LoadAPI(id, majorSeq);
+                    api = new LoadAPI(id, majorSeq);
                 }
             }
 
@@ -125,8 +134,8 @@ public class SqlTest
 
             st.executeUpdate("insert into major (name, summary, job) values('소프트웨어', '"+api.getSummary()+"', '"+api.getJob()+"')");
             st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification) values('" +
-                    api.getMajorSeq() + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + api.getMainSubject() +
-                    "', '" + api.getJob() + "', '" + api.getLegendId() + "', '"+ api.getQualification() +"')");
+                    Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + api.getMainSubject() +
+                    "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() +"')");
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
@@ -134,6 +143,7 @@ public class SqlTest
             System.out.println("All done.");
 
         } catch (SQLException sqlEX) {
+            System.out.println(sqlEX);
             System.out.println("ERROR!");
 
         }
