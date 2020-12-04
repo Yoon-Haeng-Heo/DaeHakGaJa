@@ -78,37 +78,55 @@ public class SqlTest
 
             int um_index = 1;
             int univ_index = 1;
-
+            int count = 1;
             while(rs.next()) {
+                System.out.println(count);
                 String id = rs.getString(1);
                 String name = rs.getString(2);
                 String array = rs.getString(3);
                 array = array.substring(1, array.length()-1);
                 String[] majorArr = array.split(",");
-                for(String majorSeq : majorArr){
-                    System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
+                System.out.println("Subject: "+name+"("+id+") start!");
+                for(String majorSeq : majorArr) {
+                    System.out.println("Subject: "+ name+", majorSeq: "+majorSeq);
                     api = new LoadAPI(id, majorSeq);
                     if(api.isNull) {
                         System.out.println(majorSeq+" Skip!!");
-                        continue;
+                    } else {
+                        // insert major
+                        System.out.println("Inserting tuples to Major");
+                        st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
+                                Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
+                                "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
+
+                        // university, university_major 넣는 부분
+                        for (int index = 0; index < api.getUnivArray().size(); index++) {
+                            JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
+                            rs = st.executeQuery("SELECT name FROM university WHERE name='"+univObject.get("schoolName")+"';");
+
+                            // case 1: university 테이블에 없는 대학교일 때
+                            if (!rs.next()) {
+                                // insert university
+                                st.executeUpdate("insert into university values('"+(univ_index)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
+                                univ_index++;
+
+                                // insert university_major
+                                st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                um_index++;
+                            } else {
+                                rs = st.executeQuery("select id from university_major where university_id='"+(univ_index)+"' and major_id='"+(api.getMajorSeq())+"';");
+
+                                // case 2: university 테이블에 대학은 있는데 중간테이블엔 major와 연결이 안되어 있을 때
+                                if (!rs.next()) {
+                                    // insert university_major
+                                    st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                    um_index++;
+                                }
+                            }
+                        }
                     }
-
-                    // insert university
-                    for (int index = 0; index < api.getUnivArray().size(); index++) {
-                        JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
-                        st.executeUpdate("insert into university values('"+(univ_index)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
-                        st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
-                        univ_index++;
-                        um_index++;
-                    }
-
-                    // insert major
-                    System.out.println("Inserting tuples to Major");
-                    st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
-                    Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
-                    "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
-
                 }
+                count++;
             }
 
             System.out.println("All done.");
