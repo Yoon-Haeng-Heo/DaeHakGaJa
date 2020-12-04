@@ -53,7 +53,20 @@ public class SqlTest
 
             st.executeUpdate(sql);
 
-            System.out.println("Inserting tuples to Chart, Legend, Major, University");
+            // insert legend
+            System.out.println("Inserting tuples to Legend");
+            sql = "insert into legend values('100391', '인문계열');\n" +
+                    "insert into legend values('100392', '사회계열');\n" +
+                    "insert into legend values('100393', '교육계열');\n" +
+                    "insert into legend values('100394', '공학계열');\n" +
+                    "insert into legend values('100395', '자연계열');\n" +
+                    "insert into legend values('100396', '의약계열');\n" +
+                    "insert into legend values('100397', '예체능계열');";
+
+            st.executeUpdate(sql);
+
+            // insert major
+            System.out.println("Inserting tuples to Major");
             int um_index = 1;
 //            System.out.println(api.getJa());
             for (int index = 0; index < api.getUnivArray().size(); index++) {
