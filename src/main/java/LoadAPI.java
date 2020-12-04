@@ -113,6 +113,7 @@ public class LoadAPI {
                 qualification = (String) contentObj.get("qualifications");
                 univArray = (JSONArray) contentObj.get("university");
                 mainSubject = (JSONArray) contentObj.get("main_subject");
+                System.out.println(mainSubject+"################################");
                 temp = (JSONArray) contentObj.get("lstVals");
                 JSONArray temp3 = (JSONArray) ((JSONObject) temp.get(0)).get("popular");
                 JSONArray temp4 = (JSONArray) ((JSONObject) temp.get(1)).get("bookmark");
@@ -123,6 +124,8 @@ public class LoadAPI {
                 bookmark.add((String) ((JSONObject) temp4.get(0)).get("CD_NM"));
                 bookmark.add((String) ((JSONObject) temp4.get(1)).get("CD_NM"));
                 bookmark.add((String) ((JSONObject) temp4.get(2)).get("CD_NM"));
+
+                System.out.println(bookmark+"################################");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
 //                    System.out.println("area "+univObject.get("area"));
@@ -175,7 +178,6 @@ public class LoadAPI {
     public ArrayList<String> getPopular() {
         return popular;
     }
-
     public ArrayList<String> getBookmark() {
         return bookmark;
     }

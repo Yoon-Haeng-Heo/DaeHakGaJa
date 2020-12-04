@@ -1,3 +1,4 @@
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.sql.*;
@@ -147,9 +148,8 @@ public class SqlTest
 //            st.executeUpdate("insert into major values('1', '소프트웨어학과','"+api.getSummary()+"','"+api.getMainSubject()+"', '"+api.getJob()+"', '1', '"+api.getQualification()+"')");
             // "create table major(id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
 
-            st.executeUpdate("insert into major (name, summary, job) values('소프트웨어', '"+api.getSummary()+"', '"+api.getJob()+"')");
             st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification) values('" +
-                    Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + api.getMainSubject() +
+                    Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
                     "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() +"')");
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
@@ -160,8 +160,24 @@ public class SqlTest
         } catch (SQLException sqlEX) {
             System.out.println(sqlEX);
             System.out.println("ERROR!");
-
         }
+    }
+    //JSONArray -> ArrayList로
+    public static ArrayList<String> ObjectToArray(JSONArray ja){
+        ArrayList<String> al = new ArrayList<String>();
+        for(int i = 0 ;i <ja.size();i++){
+            al.add((String)ja.get(i));
+        }
+        return al;
+    }
+    //대괄호 배열을 중괄호로
+    public static String ArrayToString(ArrayList<String> al){
+        String[] arr = al.toArray(new String[al.size()]);
+        String seq = Arrays.toString(arr);
+        seq = seq.substring(1, seq.length()-1);
+        seq = "{"+seq+"}";
+        System.out.println(seq);
+        return seq;
     }
 }
 
