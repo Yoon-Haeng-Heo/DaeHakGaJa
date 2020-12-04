@@ -50,19 +50,19 @@ public class SqlTest
 
             // create table
             System.out.println("Create relations");
-            String sql = "create table chart(id bigint, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer, satisfaction decimal, employment_rate decimal, applicant_rate decimal);\n" +
-                    "create table legend(id bigint, name text, majorSeq bigint[]);\n" +
-                    "create table major(id bigint, name text, summary text, main_subject varchar(50)[], job text, legend_id bigint, qualification text, bookmark varchar(10)[]);\n" +
-                    "create table university(id bigint, name text, area text);\n" +
-                    "create table university_major(id bigint, university_id bigint, major_id bigint);";
+            String sql = "create table chart(id bigint primary key, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer, satisfaction decimal, employment_rate decimal, applicant_rate decimal);\n" +
+                    "create table legend(id bigint primary key, name text, majorSeq bigint[]);\n" +
+                    "create table major(id bigint primary key, name text, summary text, main_subject varchar(50)[], job text, legend_id bigint, qualification text, bookmark varchar(10)[]);\n" +
+                    "create table university(id bigint primary key, name text, area text);\n" +
+                    "create table university_major(id bigint primary key, university_id bigint, major_id bigint);";
 
             st.executeUpdate(sql);
 
             // insert legend
             System.out.println("Inserting tuples to Legend");
             String[] subjectArr = new String[]{"100391", "100392", "100393", "100394", "100395", "100396", "100397"};
-            String[] subjectName = new String[]{"인문계열", "사회계열", "교육계열", "공학계열", "자연계열", "의약계열","예체능해결"};
-            for(int a = 0; a <1; a++){
+            String[] subjectName = new String[]{"인문계열", "사회계열", "교육계열", "공학계열", "자연계열", "의약계열","예체능계열"};
+            for(int a = 0; a <subjectArr.length; a++){
                 majorAPI = new LoadMajorAPI(subjectArr[a]);
                 ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
                 String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
@@ -72,31 +72,59 @@ public class SqlTest
 //                System.out.println(seq);
                 sql = "insert into legend values('"+subjectArr[a]+"' , '"+subjectName[a]+"', '"+ seq +"');";
                 st.executeUpdate(sql);
-
             }
+
 
             rs = st.executeQuery("select * from Legend;");
 
+            int um_index = 1;
+            int univ_index = 1;
+            int count = 1;
             while(rs.next()) {
+                System.out.println(count);
                 String id = rs.getString(1);
                 String name = rs.getString(2);
                 String array = rs.getString(3);
                 array = array.substring(1, array.length()-1);
                 String[] majorArr = array.split(",");
-                for(String majorSeq : majorArr){
-                    System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
+                System.out.println("Subject: "+name+"("+id+") start!");
+                for(String majorSeq : majorArr) {
+                    System.out.println("Subject: "+ name+", majorSeq: "+majorSeq);
                     api = new LoadAPI(id, majorSeq);
                     if(api.isNull) {
                         System.out.println(majorSeq+" Skip!!");
-                        continue;
-                    }
-                    // insert major
-                    System.out.println("Inserting tuples to Major");
-                    int um_index = 1;
-                    for (int index = 0; index < api.getUnivArray().size(); index++) {
-                        JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
-                        st.executeUpdate("insert into university values('"+(index+1)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
-                        st.executeUpdate("insert into university_major values('"+(um_index++)+"', '"+(index+1)+"', '"+(majorSeq)+"')");
+                    } else {
+                        // insert major
+                        System.out.println("Inserting tuples to Major");
+                        st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
+                                Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
+                                "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
+
+                        // university, university_major 넣는 부분
+                        for (int index = 0; index < api.getUnivArray().size(); index++) {
+                            JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
+                            rs = st.executeQuery("SELECT name FROM university WHERE name='"+univObject.get("schoolName")+"';");
+
+                            // case 1: university 테이블에 없는 대학교일 때
+                            if (!rs.next()) {
+                                // insert university
+                                st.executeUpdate("insert into university values('"+(univ_index)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
+                                univ_index++;
+
+                                // insert university_major
+                                st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                um_index++;
+                            } else {
+                                rs = st.executeQuery("select id from university_major where university_id='"+(univ_index)+"' and major_id='"+(api.getMajorSeq())+"';");
+
+                                // case 2: university 테이블에 대학은 있는데 중간테이블엔 major와 연결이 안되어 있을 때
+                                if (!rs.next()) {
+                                    // insert university_major
+                                    st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                    um_index++;
+                                }
+                            }
+                        }
                     }
 
                     System.out.println("university done");
@@ -109,10 +137,8 @@ public class SqlTest
 
 
                 }
+                count++;
             }
-
-            // load api
-            //api = new LoadAPI("100394","290");
 
             System.out.println("All done.");
 
@@ -135,7 +161,7 @@ public class SqlTest
         String seq = Arrays.toString(arr);
         seq = seq.substring(1, seq.length()-1);
         seq = "{"+seq+"}";
-        System.out.println(seq);
+//        System.out.println(seq);
         return seq;
     }
 }
