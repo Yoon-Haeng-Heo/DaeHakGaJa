@@ -85,7 +85,10 @@ public class SqlTest
                 for(String majorSeq : majorArr){
                     System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
                     api = new LoadAPI(id, majorSeq);
-
+                    if(api.isNull) {
+                        System.out.println(majorSeq+" Skip!!");
+                        continue;
+                    }
                     // insert major
                     System.out.println("Inserting tuples to Major");
                     int um_index = 1;

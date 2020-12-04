@@ -48,6 +48,8 @@ public class LoadAPI {
     JSONArray enter_field = null;
     ArrayList<String> popular = new ArrayList<String>();
     ArrayList<String> bookmark = new ArrayList<String>();
+    boolean isNull = false;
+
     public LoadAPI(String subject, String majorSeq){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -99,9 +101,13 @@ public class LoadAPI {
                 satisfaction = (JSONArray) ja2.get("satisfaction");
                 JSONArray temp = (JSONArray)ja2.get("employment_rate");
                 JSONArray tempApplicant = (JSONArray) ja2.get("applicant");
-                float allapplicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(0)).get("data"));
-                float applicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(1)).get("data"));
-                applicantRate = applicant / allapplicant ;
+                if(tempApplicant != null) {
+                    float allapplicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(0)).get("data"));
+
+                    float applicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(1)).get("data"));
+                    applicantRate = applicant / allapplicant;
+                }
+
                 JSONObject temp2 = (JSONObject) temp.get(0);
                 employmentRate = (String) temp2.get("data");
                 //  gender = (JSONObject) ja2.get("gender").get(0) ;
@@ -135,10 +141,23 @@ public class LoadAPI {
             }catch(ParseException e){
                 e.printStackTrace();
             }
+            catch(IndexOutOfBoundsException iex){
+                this.isNull = true;
+                System.out.println(iex);
+            }
+            catch(NullPointerException nex){
+                this.isNull = true;
+                System.out.println(nex);
+            }
         }catch(IOException ex){
             System.out.println(ex);
         }
     }
+
+    public boolean isNull() {
+        return isNull;
+    }
+
     public JSONObject getJo() {
         return jo;
     }
