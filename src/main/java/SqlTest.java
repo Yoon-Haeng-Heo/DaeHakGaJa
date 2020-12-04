@@ -2,6 +2,7 @@ import org.json.simple.JSONObject;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 public class SqlTest
 {
@@ -9,7 +10,7 @@ public class SqlTest
     {
         home h = new home();
         LoadAPI api;
-        LoadMajorAPI majorAPI = new LoadMajorAPI("100394");
+        LoadMajorAPI majorAPI;
         try {
             Connection conn = null;
             Statement st = null;
@@ -24,15 +25,7 @@ public class SqlTest
             rs = st.executeQuery("SELECT VERSION()");
 
             if (rs.next()) System.out.println(rs.getString(1));
-            ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
-            for(int i=0;i<majorAPI.getMajorSeqArr().size();i++){
-                System.out.println(majorAPI.getMajorSeqArr().get(i));
-            }
-            String[] array = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
 
-//            for(String str : array){
-//                System.out.println(str);
-//            }
             System.out.println("Drop all relations!");
 
             String sql = "drop table university CASCADE;\n" + "drop table chart;\n" + "drop table legend CASCADE;\n" + "drop table major;\n" + "drop table university_major;";
@@ -65,6 +58,15 @@ public class SqlTest
 
             // insert legend
             System.out.println("Inserting tuples to Legend");
+
+            majorAPI = new LoadMajorAPI("100394");
+            ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
+            String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
+            String seq = Arrays.toString(arr);
+            seq = seq.substring(1, seq.length()-1);
+            seq = "{"+seq+"}";
+            System.out.println(seq);
+
             sql = "insert into legend values('100391', '인문계열', '{29, 48, 56, 10145, 69, 93, 10053, 122, 124, 132, 134, 163, 164, 165, 166, 169, 10030, 10031, 179, 188}');\n" +
                     "insert into legend values('100392', '사회계열', '{8, 22, 10139, 23, 24, 25, 26, 27, 45, 46, 50, 54, 10141, 10143, 70, 10148, 10007, 74, 373, 10026}');\n" +
                     "insert into legend values('100393', '교육계열', '{10006, 44, 57, 58, 59, 68, 32, 108, 123, 174, 183, 225, 238, 263, 299, 10033, 331, 346, 350, 365}');\n" +
@@ -86,7 +88,7 @@ public class SqlTest
                 String[] majorArr = array.split(",");
                 for(String majorSeq : majorArr){
                     System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
-                    api = new LoadAPI(id, majorSeq);
+//                    api = new LoadAPI(id, majorSeq);
                 }
             }
 
