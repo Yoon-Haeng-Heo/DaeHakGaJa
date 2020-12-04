@@ -37,10 +37,12 @@ public class LoadAPI {
     String job = "";
     String qualification = "";
     String majorSeq = "";
+    String majorName ="";
     JSONArray avg_salary = null;
     JSONArray satisfaction = null;
     String employmentRate = "";
     float applicantRate = 0;
+    int legend_id;
     JSONArray enter_field = null;
     public LoadAPI(String subject, String majorSeq){
         try {
@@ -81,6 +83,7 @@ public class LoadAPI {
                 JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
                 JSONObject contentObj = (JSONObject) contentArray.get(0);
 
+                legend_id = Integer.parseInt(subject);
                 // Chart table의 컬럼
                 enter_field = (JSONArray) contentObj.get("enter_field");
                 //jo = contentObj;
@@ -100,7 +103,7 @@ public class LoadAPI {
                 //  gender = (JSONObject) ja2.get("gender").get(0) ;
 
                 // Major table의 column -> name, summary, main_subject, job, legend_id, qualification
-
+                majorName = (String) contentObj.get("major");
                 summary = (String) contentObj.get("summary");
                 job = (String) contentObj.get("job");
                 qualification = (String) contentObj.get("qualifications");
@@ -144,9 +147,11 @@ public class LoadAPI {
     public float getFemaleRatio(){
         return Float.parseFloat((String)((JSONObject) gender.get(1)).get("data"));
     }
+    public int getLegendId(){ return legend_id; }
     public String getMajorSeq() {
         return majorSeq;
     }
+    public String getMajorName() { return majorName; }
     public JSONArray getAvg_salary(){ return avg_salary;}
     public JSONArray getSatisfaction(){ return satisfaction;}
     public String getEmploymentRate(){ return employmentRate;}

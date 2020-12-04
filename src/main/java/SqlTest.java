@@ -47,7 +47,7 @@ public class SqlTest
 
             String sql = "create table chart(id bigint, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer, satisfaction decimal, employment_rate decimal, applicant_rate decimal);\n" +
                     "create table legend(id bigint, name text);\n" +
-                    "create table major(id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
+                    "create table major(id bigint, name text, summary text, main_subject varchar(50)[], job text, legend_id bigint, qualification text);\n" +
                     "create table university(id bigint, name text, area text);\n" +
                     "create table university_major(id bigint, university_id bigint, major_id bigint);";
 
@@ -77,9 +77,37 @@ public class SqlTest
 
             System.out.println("university done");
 
+            System.out.println("summary ----------");
+            System.out.println(api.getSummary());
+
+            System.out.println("job ----------");
+            System.out.println(api.getJob());
+
+            System.out.println("qualification ----------");
+            System.out.println(api.getQualification());
+
+            System.out.println("univarray ----------");
+            System.out.println(api.getUnivArray());
+
+            System.out.println("mainsubject ----------");
+            System.out.println(api.getMainSubject());
+
+            System.out.println("majorid ----------");
+            System.out.println(api.getMajorSeq());
+
+            System.out.println("majorSeq --------");
+            System.out.println(api.getMajorName());
+
+            System.out.println("legend_id");
+            System.out.println(api.getLegendId());
+
 //            st.executeUpdate("insert into major values('1', '소프트웨어학과','"+api.getSummary()+"','"+api.getMainSubject()+"', '"+api.getJob()+"', '1', '"+api.getQualification()+"')");
+            // "create table major(id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
 
             st.executeUpdate("insert into major (name, summary, job) values('소프트웨어', '"+api.getSummary()+"', '"+api.getJob()+"')");
+            st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification) values('" +
+                    api.getMajorSeq() + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + api.getMainSubject() +
+                    "', '" + api.getJob() + "', '" + api.getLegendId() + "', '"+ api.getQualification() +"')");
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
