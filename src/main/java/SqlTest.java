@@ -77,7 +77,7 @@ public class SqlTest
                 String[] majorArr = array.split(",");
                 for(String majorSeq : majorArr){
                     System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
-                    api = new LoadAPI(id, majorSeq);
+//                    api = new LoadAPI(id, majorSeq);
                 }
             }
 
