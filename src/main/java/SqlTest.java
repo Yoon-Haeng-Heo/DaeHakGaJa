@@ -7,6 +7,7 @@ public class SqlTest
     public static void main(String[] args) throws SQLException
     {
         home h = new home();
+        LoadAPI api;
 
         try {
             Connection conn = null;
@@ -68,21 +69,20 @@ public class SqlTest
             rs = st.executeQuery("select * from Legend;");
 
             while(rs.next()) {
+                System.out.println("loop start!!");
                 String id = rs.getString(1);
                 String name = rs.getString(2);
-                String majorSeq = rs.getString(3);
-                majorSeq = majorSeq.substring(1, majorSeq.length()-1);
-                String[] majorArr = majorSeq.split(",");
-//                for(String str : majorArr){
-//                    System.out.println(str);
-//                }
-                System.out.println();
-                System.out.println(majorSeq);
-                
+                String array = rs.getString(3);
+                array = array.substring(1, array.length()-1);
+                String[] majorArr = array.split(",");
+                for(String majorSeq : majorArr){
+                    System.out.println("Subject: "+ name+" majorSeq: "+majorSeq);
+                    api = new LoadAPI(id, majorSeq);
+                }
             }
 
             // load api
-            LoadAPI api = new LoadAPI("100394","290");
+            api = new LoadAPI("100394","290");
 
             // insert major
             System.out.println("Inserting tuples to Major");
