@@ -72,7 +72,11 @@ public class SqlTest
                 String name = rs.getString(2);
                 String majorSeq = rs.getString(3);
                 majorSeq = majorSeq.substring(1, majorSeq.length()-1);
-                
+                String[] majorArr = majorSeq.split(",");
+//                for(String str : majorArr){
+//                    System.out.println(str);
+//                }
+                System.out.println();
                 System.out.println(majorSeq);
                 
             }
