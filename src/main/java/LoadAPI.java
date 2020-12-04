@@ -22,6 +22,8 @@ import org.xml.sax.InputSource;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,6 +46,8 @@ public class LoadAPI {
     float applicantRate = 0;
     int legend_id;
     JSONArray enter_field = null;
+    ArrayList<String> popular = new ArrayList<String>();
+    ArrayList<String> bookmark = new ArrayList<String>();
     public LoadAPI(String subject, String majorSeq){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -109,6 +113,16 @@ public class LoadAPI {
                 qualification = (String) contentObj.get("qualifications");
                 univArray = (JSONArray) contentObj.get("university");
                 mainSubject = (JSONArray) contentObj.get("main_subject");
+                temp = (JSONArray) contentObj.get("lstVals");
+                JSONArray temp3 = (JSONArray) ((JSONObject) temp.get(0)).get("popular");
+                JSONArray temp4 = (JSONArray) ((JSONObject) temp.get(1)).get("bookmark");
+                popular.add((String) ((JSONObject) temp3.get(0)).get("CD_NM"));
+                popular.add((String) ((JSONObject) temp3.get(1)).get("CD_NM"));
+                popular.add((String) ((JSONObject) temp3.get(2)).get("CD_NM"));
+
+                bookmark.add((String) ((JSONObject) temp4.get(0)).get("CD_NM"));
+                bookmark.add((String) ((JSONObject) temp4.get(1)).get("CD_NM"));
+                bookmark.add((String) ((JSONObject) temp4.get(2)).get("CD_NM"));
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
 //                    System.out.println("area "+univObject.get("area"));
@@ -157,6 +171,14 @@ public class LoadAPI {
     public String getEmploymentRate(){ return employmentRate;}
     public float getApplicantRate(){return applicantRate;}
     public JSONArray getEnter_field(){return enter_field;}
+
+    public ArrayList<String> getPopular() {
+        return popular;
+    }
+
+    public ArrayList<String> getBookmark() {
+        return bookmark;
+    }
 }
 
 
