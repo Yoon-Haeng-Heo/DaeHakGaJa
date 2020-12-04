@@ -31,10 +31,17 @@ public class LoadAPI {
     JSONArray ja = null;
     JSONArray univArray = null;
     JSONArray mainSubject = null;
+    JSONArray chartdata = null;
+    JSONArray gender = null;
     String summary = "";
     String job = "";
     String qualification = "";
     String majorSeq = "";
+    JSONArray avg_salary = null;
+    JSONArray satisfaction = null;
+    String employmentRate = "";
+    float applicantRate = 0;
+    JSONArray enter_field = null;
     public LoadAPI(String subject, String majorSeq){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -73,7 +80,22 @@ public class LoadAPI {
                 JSONObject dataSearchObj = (JSONObject) obj.get("dataSearch");
                 JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
                 JSONObject contentObj = (JSONObject) contentArray.get(0);
+                enter_field = (JSONArray) contentObj.get("enter_field");
                 //jo = contentObj;
+                chartdata = (JSONArray) contentObj.get("chartData");
+                JSONObject ja2 =(JSONObject) chartdata.get(0);
+                gender = (JSONArray) ja2.get("gender");
+                System.out.println(ja2);
+                avg_salary = (JSONArray) ja2.get("avg_salary");
+                satisfaction = (JSONArray) ja2.get("satisfaction");
+                JSONArray temp = (JSONArray)ja2.get("employment_rate");
+                JSONArray tempApplicant = (JSONArray) ja2.get("applicant");
+                float allapplicant = (float)((JSONObject) tempApplicant.get(0)).get("data");
+                float applicant = (float) ((JSONObject) tempApplicant.get(1)).get("data");
+                applicantRate = applicant / allapplicant ;
+                JSONObject temp2 = (JSONObject) temp.get(0);
+                employmentRate = (String) temp2.get("data");
+//                gender = (JSONObject) ja2.get("gender").get(0) ;
                 summary = (String) contentObj.get("summary");
                 job = (String) contentObj.get("job");
                 qualification = (String) contentObj.get("qualifications");
@@ -81,9 +103,9 @@ public class LoadAPI {
                 mainSubject = (JSONArray) contentObj.get("main_subject");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
-//                    System.out.println("area "+univObject.get("area"));
-//                    System.out.println("majorName " + univObject.get("majorName"));
-//                    System.out.println("schoolName "+ univObject.get("schoolName"));
+                    System.out.println("area "+univObject.get("area"));
+                    System.out.println("majorName " + univObject.get("majorName"));
+                    System.out.println("schoolName "+ univObject.get("schoolName"));
                 }
             }catch(ParseException e){
                 e.printStackTrace();
@@ -110,9 +132,15 @@ public class LoadAPI {
     public String getQualification() {
         return qualification;
     }
+    public JSONArray getGender(){ return gender; }
     public String getMajorSeq() {
         return majorSeq;
     }
+    public JSONArray getAvg_salary(){ return avg_salary;}
+    public JSONArray getSatisfaction(){ return satisfaction;}
+    public String getEmploymentRate(){ return employmentRate;}
+    public float getApplicantRate(){return applicantRate;}
+    public JSONArray getEnter_field(){return enter_field;}
 }
 
 
