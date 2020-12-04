@@ -90,8 +90,8 @@ public class LoadAPI {
                 satisfaction = (JSONArray) ja2.get("satisfaction");
                 JSONArray temp = (JSONArray)ja2.get("employment_rate");
                 JSONArray tempApplicant = (JSONArray) ja2.get("applicant");
-                float allapplicant = (float)((JSONObject) tempApplicant.get(0)).get("data");
-                float applicant = (float) ((JSONObject) tempApplicant.get(1)).get("data");
+                float allapplicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(0)).get("data"));
+                float applicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(1)).get("data"));
                 applicantRate = applicant / allapplicant ;
                 JSONObject temp2 = (JSONObject) temp.get(0);
                 employmentRate = (String) temp2.get("data");
