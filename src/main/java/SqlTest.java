@@ -71,8 +71,10 @@ public class SqlTest
                 String id = rs.getString(1);
                 String name = rs.getString(2);
                 String majorSeq = rs.getString(3);
-
+                majorSeq = majorSeq.substring(1, majorSeq.length()-1);
+                
                 System.out.println(majorSeq);
+                
             }
 
             // load api
