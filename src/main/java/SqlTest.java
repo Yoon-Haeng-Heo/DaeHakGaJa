@@ -51,7 +51,7 @@ public class SqlTest
             System.out.println("Create relations");
             String sql = "create table chart(id bigint, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer, satisfaction decimal, employment_rate decimal, applicant_rate decimal);\n" +
                     "create table legend(id bigint, name text, majorSeq bigint[]);\n" +
-                    "create table major(id bigint, name text, summary text, main_subject varchar(50)[], job text, legend_id bigint, qualification text);\n" +
+                    "create table major(id bigint, name text, summary text, main_subject varchar(50)[], job text, legend_id bigint, qualification text, bookmark varchar(10)[]);\n" +
                     "create table university(id bigint, name text, area text);\n" +
                     "create table university_major(id bigint, university_id bigint, major_id bigint);";
 
@@ -148,9 +148,10 @@ public class SqlTest
 //            st.executeUpdate("insert into major values('1', '소프트웨어학과','"+api.getSummary()+"','"+api.getMainSubject()+"', '"+api.getJob()+"', '1', '"+api.getQualification()+"')");
             // "create table major(id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
 
-            st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification) values('" +
+            st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
                     Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
-                    "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() +"')");
+                    "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
+
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
             System.out.println(api.getMainSubject());
