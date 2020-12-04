@@ -79,9 +79,7 @@ public class SqlTest
 
             int um_index = 1;
             int univ_index = 1;
-            int count = 1;
             while(rs.next()) {
-                System.out.println(count);
                 String id = rs.getString(1);
                 String name = rs.getString(2);
                 String array = rs.getString(3);
@@ -103,10 +101,11 @@ public class SqlTest
                         // university, university_major 넣는 부분
                         for (int index = 0; index < api.getUnivArray().size(); index++) {
                             JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
-                            rs = st.executeQuery("SELECT name FROM university WHERE name='"+univObject.get("schoolName")+"';");
+                            ResultSet sub_rs = null;
+                            sub_rs = st.executeQuery("SELECT name FROM university WHERE name='"+univObject.get("schoolName")+"';");
 
                             // case 1: university 테이블에 없는 대학교일 때
-                            if (!rs.next()) {
+                            if (!sub_rs.next()) {
                                 // insert university
                                 st.executeUpdate("insert into university values('"+(univ_index)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
                                 univ_index++;
@@ -115,10 +114,10 @@ public class SqlTest
                                 st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
                                 um_index++;
                             } else {
-                                rs = st.executeQuery("select id from university_major where university_id='"+(univ_index)+"' and major_id='"+(api.getMajorSeq())+"';");
+                                sub_rs = st.executeQuery("select id from university_major where university_id='"+(univ_index)+"' and major_id='"+(api.getMajorSeq())+"';");
 
                                 // case 2: university 테이블에 대학은 있는데 중간테이블엔 major와 연결이 안되어 있을 때
-                                if (!rs.next()) {
+                                if (!sub_rs.next()) {
                                     // insert university_major
                                     st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
                                     um_index++;
@@ -126,18 +125,7 @@ public class SqlTest
                             }
                         }
                     }
-
-                    System.out.println("university done");
-
-                    // "create table major (id bigint, name text, summary text, main_subject text, job text, legend_id bigint, qualification text);\n" +
-
-                    st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
-                            Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
-                            "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
-
-
                 }
-                count++;
             }
 
             System.out.println("All done.");
