@@ -80,6 +80,8 @@ public class LoadAPI {
                 JSONObject dataSearchObj = (JSONObject) obj.get("dataSearch");
                 JSONArray contentArray = (JSONArray) dataSearchObj.get("content");
                 JSONObject contentObj = (JSONObject) contentArray.get(0);
+
+                // Chart table의 컬럼
                 enter_field = (JSONArray) contentObj.get("enter_field");
                 //jo = contentObj;
                 chartdata = (JSONArray) contentObj.get("chartData");
@@ -95,7 +97,10 @@ public class LoadAPI {
                 applicantRate = applicant / allapplicant ;
                 JSONObject temp2 = (JSONObject) temp.get(0);
                 employmentRate = (String) temp2.get("data");
-//                gender = (JSONObject) ja2.get("gender").get(0) ;
+                //  gender = (JSONObject) ja2.get("gender").get(0) ;
+
+                // Major table의 column -> name, summary, main_subject, job, legend_id, qualification
+
                 summary = (String) contentObj.get("summary");
                 job = (String) contentObj.get("job");
                 qualification = (String) contentObj.get("qualifications");
