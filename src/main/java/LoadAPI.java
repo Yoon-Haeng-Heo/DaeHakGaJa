@@ -58,7 +58,7 @@ public class LoadAPI {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-type", "application/json");
-            System.out.println("Response code: " + conn.getResponseCode());
+//            System.out.println("Response code: " + conn.getResponseCode());
             BufferedReader rd;
             if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
                 rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -73,7 +73,7 @@ public class LoadAPI {
             rd.close();
             conn.disconnect();
             String result = sb.toString();
-            System.out.println(result); // Debug print line
+//            System.out.println(result); // Debug print line
             try {
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(result);
@@ -87,13 +87,13 @@ public class LoadAPI {
                 chartdata = (JSONArray) contentObj.get("chartData");
                 JSONObject ja2 =(JSONObject) chartdata.get(0);
                 gender = (JSONArray) ja2.get("gender");
-                System.out.println(ja2);
+
                 avg_salary = (JSONArray) ja2.get("avg_salary");
                 satisfaction = (JSONArray) ja2.get("satisfaction");
                 JSONArray temp = (JSONArray)ja2.get("employment_rate");
                 JSONArray tempApplicant = (JSONArray) ja2.get("applicant");
-                float allapplicant = (float)((JSONObject) tempApplicant.get(0)).get("data");
-                float applicant = (float) ((JSONObject) tempApplicant.get(1)).get("data");
+                float allapplicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(0)).get("data"));
+                float applicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(1)).get("data"));
                 applicantRate = applicant / allapplicant ;
                 JSONObject temp2 = (JSONObject) temp.get(0);
                 employmentRate = (String) temp2.get("data");
@@ -108,9 +108,9 @@ public class LoadAPI {
                 mainSubject = (JSONArray) contentObj.get("main_subject");
                 for(int a=0; a< univArray.size(); a++){
                     JSONObject univObject = (JSONObject) univArray.get(a);
-                    System.out.println("area "+univObject.get("area"));
-                    System.out.println("majorName " + univObject.get("majorName"));
-                    System.out.println("schoolName "+ univObject.get("schoolName"));
+//                    System.out.println("area "+univObject.get("area"));
+//                    System.out.println("majorName " + univObject.get("majorName"));
+//                    System.out.println("schoolName "+ univObject.get("schoolName"));
                 }
             }catch(ParseException e){
                 e.printStackTrace();
@@ -138,6 +138,12 @@ public class LoadAPI {
         return qualification;
     }
     public JSONArray getGender(){ return gender; }
+    public float getMaleRatio(){
+        return Float.parseFloat((String)((JSONObject) gender.get(0)).get("data"));
+    }
+    public float getFemaleRatio(){
+        return Float.parseFloat((String)((JSONObject) gender.get(1)).get("data"));
+    }
     public String getMajorSeq() {
         return majorSeq;
     }
