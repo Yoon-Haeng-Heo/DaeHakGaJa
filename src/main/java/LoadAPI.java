@@ -85,7 +85,7 @@ public class LoadAPI {
                 chartdata = (JSONArray) contentObj.get("chartData");
                 JSONObject ja2 =(JSONObject) chartdata.get(0);
                 gender = (JSONArray) ja2.get("gender");
-                System.out.println(ja2);
+
                 avg_salary = (JSONArray) ja2.get("avg_salary");
                 satisfaction = (JSONArray) ja2.get("satisfaction");
                 JSONArray temp = (JSONArray)ja2.get("employment_rate");
@@ -133,6 +133,12 @@ public class LoadAPI {
         return qualification;
     }
     public JSONArray getGender(){ return gender; }
+    public float getMaleRatio(){
+        return Float.parseFloat((String)((JSONObject) gender.get(0)).get("data"));
+    }
+    public float getFemaleRatio(){
+        return Float.parseFloat((String)((JSONObject) gender.get(1)).get("data"));
+    }
     public String getMajorSeq() {
         return majorSeq;
     }
