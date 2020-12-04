@@ -58,24 +58,37 @@ public class SqlTest
 
             // insert legend
             System.out.println("Inserting tuples to Legend");
+            String[] subjectArr = new String[]{"100391", "100392", "100393", "100394", "100395", "100396", "100397"};
+            String[] subjectName = new String[]{"인문계열", "사회계열", "교육계열", "공학계열", "자연계열", "의약계열","예체능해결"};
+            for(int a = 0; a <subjectArr.length; a++){
+                majorAPI = new LoadMajorAPI(subjectArr[a]);
+                ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
+                String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
+                String seq = Arrays.toString(arr);
+                seq = seq.substring(1, seq.length()-1);
+                seq = "{"+seq+"}";
+                System.out.println(seq);
+                sql = "insert into legend values('"+subjectArr[a]+"' , '"+subjectName[a]+"', '"+ seq +"');";
+                st.executeUpdate(sql);
 
-            majorAPI = new LoadMajorAPI("100394");
-            ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
-            String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
-            String seq = Arrays.toString(arr);
-            seq = seq.substring(1, seq.length()-1);
-            seq = "{"+seq+"}";
-            System.out.println(seq);
-
-            sql = "insert into legend values('100391', '인문계열', '{29, 48, 56, 10145, 69, 93, 10053, 122, 124, 132, 134, 163, 164, 165, 166, 169, 10030, 10031, 179, 188}');\n" +
-                    "insert into legend values('100392', '사회계열', '{8, 22, 10139, 23, 24, 25, 26, 27, 45, 46, 50, 54, 10141, 10143, 70, 10148, 10007, 74, 373, 10026}');\n" +
-                    "insert into legend values('100393', '교육계열', '{10006, 44, 57, 58, 59, 68, 32, 108, 123, 174, 183, 225, 238, 263, 299, 10033, 331, 346, 350, 365}');\n" +
-                    "insert into legend values('100394', '공학계열', '{16, 17, 18, 20, 21, 30, 35, 36, 55, 10142, 61, 10147, 10142, 61, 10147, 10038, 79, 85, 86, 87, 88, 89, 290}');\n" +
-                    "insert into legend values('100395', '자연계열', '{7, 10144, 10146, 96, 105, 106, 111, 126, 10120, 177, 190, 245, 260, 261, 262, 10048, 265, 267, 296}');\n" +
-                    "insert into legend values('100396', '의약계열', '{9, 10, 43, 175, 176, 196, 10012, 210, 215, 255, 288, 341, 10016, 10046, 10045, 399, 10014, 402, 404, 405}');\n" +
-                    "insert into legend values('100397', '예체능계열', '{12, 11, 28, 10041, 33, 34, 37, 38, 39, 41, 49, 51, 10140, 67, 77, 78, 94, 113, 114, 120}');";
-
-           st.executeUpdate(sql);
+            }
+//            majorAPI = new LoadMajorAPI("100394");
+//            ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
+//            String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
+//            String seq = Arrays.toString(arr);
+//            seq = seq.substring(1, seq.length()-1);
+//            seq = "{"+seq+"}";
+//            System.out.println(seq);
+//
+//            sql = "insert into legend values('100391', '인문계열', '{29, 48, 56, 10145, 69, 93, 10053, 122, 124, 132, 134, 163, 164, 165, 166, 169, 10030, 10031, 179, 188}');\n" +
+//                    "insert into legend values('100392', '사회계열', '{8, 22, 10139, 23, 24, 25, 26, 27, 45, 46, 50, 54, 10141, 10143, 70, 10148, 10007, 74, 373, 10026}');\n" +
+//                    "insert into legend values('100393', '교육계열', '{10006, 44, 57, 58, 59, 68, 32, 108, 123, 174, 183, 225, 238, 263, 299, 10033, 331, 346, 350, 365}');\n" +
+//                    "insert into legend values('100394', '공학계열', '{16, 17, 18, 20, 21, 30, 35, 36, 55, 10142, 61, 10147, 10142, 61, 10147, 10038, 79, 85, 86, 87, 88, 89, 290}');\n" +
+//                    "insert into legend values('100395', '자연계열', '{7, 10144, 10146, 96, 105, 106, 111, 126, 10120, 177, 190, 245, 260, 261, 262, 10048, 265, 267, 296}');\n" +
+//                    "insert into legend values('100396', '의약계열', '{9, 10, 43, 175, 176, 196, 10012, 210, 215, 255, 288, 341, 10016, 10046, 10045, 399, 10014, 402, 404, 405}');\n" +
+//                    "insert into legend values('100397', '예체능계열', '{12, 11, 28, 10041, 33, 34, 37, 38, 39, 41, 49, 51, 10140, 67, 77, 78, 94, 113, 114, 120}');";
+//
+//           st.executeUpdate(sql);
 
             rs = st.executeQuery("select * from Legend;");
 
