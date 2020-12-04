@@ -40,3 +40,4 @@ hs_err_pid*
 .gradle/6.3/executionHistory/executionHistory.bin
 .gradle/checksums/checksums.lock
 src/main/java/home.java
+.idea/workspace.xml
