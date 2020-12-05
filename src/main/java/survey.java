@@ -1,10 +1,17 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class survey {
-    public survey(){
+    ResultSet rs = null;
+    Statement st = null;
+    String result_query = "";
+    public survey(ResultSet rs, Statement st){
         Scanner scan = new Scanner(System.in);
         char[] user_answer = new char[6];
-
+        this.rs = rs;
+        this.st = st;
         String guide_message = "해당하는 항목을 입력해주세요. 예를 들어, a)에 해당한다면 'a'를 입력해주세요.";
 
         String[] question = new String[6];
@@ -40,20 +47,39 @@ public class survey {
             for(int answer_index=1; answer_index<=2; answer_index++){
                 System.out.println(answer[question_index][answer_index]);
             }
-            while(true){
+            while(true) {
                 user_answer[question_index] = scan.next().charAt(0);
-                if(user_answer[question_index] == 'a'){
-                    // rs = st.executeUpdate("select major from major where legend_id in (100394, 100395, 100396);"
+                if (user_answer[question_index] == 'a') {
                     break;
-                }
-                else if(user_answer[question_index] == 'b'){
-                    // rs = st.executeUpdate("select major from major where legend_id in (100391, 100392, 100393, 100397);"
+                } else if (user_answer[question_index] == 'b') {
                     break;
                 }//select name, bookmark from major where '안정성'=ANY(bookmark) order by (select array_position(major.bookmark, '안정성')) asc;
                 System.out.println("올바른 값을 입력해주세요.");
             }
         }
-        // user_answer[1] == 'a' ? "(100394, 100395, 100396)" : "(100391, 100392, 100393, 100397)"
-        // user_answer[2] == 'a' ? "
+        result_query = "select major.name " +
+                "from major, chart " +
+                "where legend_id in " +
+                (user_answer[1] == 'a' ? "(100394, 100395, 100396) " : "(100391, 100392, 100393, 100397) " ) +
+                "and chart.major_id = major.id and " +
+                (user_answer[3] == 'a' ? "'사회적 인정'" : "'능력발휘'") +
+                "=any(bookmark) " +
+                "order by chart.field_data[1] " +
+                (user_answer[2] == 'a' ? "desc, " : "asc, ") +
+                "array_position(major.bookmark, " +
+                (user_answer[3] == 'a' ? "'사회적 인정'" : "'능력발휘'") +
+                ") asc, " +
+                "chart.employment_rate " +
+                (user_answer[4] == 'a' ? "asc, " : "desc, ") +
+                "chart.avg_salary " +
+                (user_answer[5] == 'a' ? "asc, " : "desc, ") +
+                "satisfaction_data[4]::numeric + satisfaction_data[5]::numeric " +
+                (user_answer[5] == 'a' ? "desc;" : "asc;");
+
+        System.out.println(result_query);
+    }
+
+    public String getResult_query() {
+        return result_query;
     }
 }
