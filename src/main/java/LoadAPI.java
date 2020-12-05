@@ -117,7 +117,7 @@ public class LoadAPI {
                     float allapplicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(0)).get("data"));
 
                     float applicant = Float.parseFloat((String) ((JSONObject) tempApplicant.get(1)).get("data"));
-                    applicantRate = applicant / allapplicant;
+                    applicantRate = allapplicant / applicant;
                 }
 
                 JSONObject temp2 = (JSONObject) temp.get(0);

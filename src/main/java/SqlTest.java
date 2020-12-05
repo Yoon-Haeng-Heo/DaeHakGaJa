@@ -74,14 +74,13 @@ public class SqlTest
                 System.out.println("Inserting tuples to Legend");
                 String[] subjectArr = new String[]{"100391", "100392", "100393", "100394", "100395", "100396", "100397"};
                 String[] subjectName = new String[]{"인문계열", "사회계열", "교육계열", "공학계열", "자연계열", "의약계열","예체능계열"};
-                for(int a = 0; a <subjectArr.length; a++){
+                for(int a = 0; a <subjectArr.length; a++) {
                     majorAPI = new LoadMajorAPI(subjectArr[a]);
                     ArrayList<String> MajorSeqArr = majorAPI.getMajorSeqArr();
                     String[] arr = MajorSeqArr.toArray(new String[MajorSeqArr.size()]);
                     String seq = Arrays.toString(arr);
                     seq = seq.substring(1, seq.length()-1);
                     seq = "{"+seq+"}";
-    //                System.out.println(seq);
                     sql = "insert into legend values('"+subjectArr[a]+"' , '"+subjectName[a]+"', '"+ seq +"');";
                     st.executeUpdate(sql);
                 }
@@ -109,14 +108,11 @@ public class SqlTest
                                     Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
                                     "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
                             // insert chart
-                            // "create table chart(id serial primary key, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer,
-                            // satisfaction_data varchar(10)[], satisfaction_item varchar(30)[], employment_rate decimal, applicant_rate decimal,
-                            // field_data varchar(10)[], field_item varchar(30)[]);\n" +
                             String insertChart = "insert into chart values(default,'"+Integer.parseInt(api.getMajorSeq()) + "' , '"+api.getMaleRatio() + "' , '" +api.getFemaleRatio()+"', '" + api.getAvg_salary() + "', '"
                                     +ArrayToString(fieldToDataArray(api.getSatisfactions())) + "', '" + ArrayToString(fieldToItemArray(api.getSatisfactions()))+ "' , '"
                                     +api.getEmploymentRate() + "', '"+api.getApplicantRate()+"', '"+ ArrayToString(fieldToDataArray(api.getFields())) + "', '"+ ArrayToString(fieldToItemArray(api.getFields()))+"'); ";
                             st.executeUpdate(insertChart);
-    //                        System.out.println("Chart insert success!!!!!");
+
                             // university, university_major 넣는 부분
                             for (int index = 0; index < api.getUnivArray().size(); index++) {
                                 JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
@@ -147,7 +143,9 @@ public class SqlTest
                         }
                     }
                 }
-            } // if문
+            }
+
+            // if문
             survey survey = new survey(rs, st);
             String final_query = survey.getResult_query();
 
@@ -168,7 +166,7 @@ public class SqlTest
             System.out.println("ERROR!");
         }
 
-        display Display = new display(10145, "major");
+        display Display = new display(10145, "chart");
         System.out.println(Display.getResult());
     }
     public static ArrayList<String> fieldToDataArray(ArrayList<LoadAPI.field> al){
