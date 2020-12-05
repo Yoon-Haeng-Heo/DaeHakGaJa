@@ -213,7 +213,7 @@ public class SqlTest
                                 // case 2: university 테이블에 대학은 있는데 중간테이블엔 major와 연결이 안되어 있을 때
                                 if (!sub_rs.next()) {
                                     // insert university_major
-                                    st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                    st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_id)+"', '"+(api.getMajorSeq())+"')");
                                     um_index++;
                                 }
                             }

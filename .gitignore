@@ -42,3 +42,4 @@ hs_err_pid*
 src/main/java/home.java
 .idea/workspace.xml
 .idea/workspace.xml
+*.xml
