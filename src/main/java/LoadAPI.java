@@ -98,12 +98,11 @@ public class LoadAPI {
                 JSONObject ja2 =(JSONObject) chartdata.get(0);
                 gender = (JSONArray) ja2.get("gender");
                 JSONArray f = (JSONArray) ja2.get("field");
-                ArrayList<field> aldata = new ArrayList<field>();
                 for(int i = 0 ;i < f.size(); i++){
-                    aldata.add(new field( (String) ((JSONObject) f.get(i)).get("item")  ,
+                    fields.add(new field( (String) ((JSONObject) f.get(i)).get("item")  ,
                             (String)((JSONObject) f.get(i)).get("data") ));
                 }
-                Collections.sort(aldata);
+                Collections.sort(fields);
 //                System.out.println(aldata.get(0).getData()+"##################################");
                 avg_salary = (JSONArray) ja2.get("avg_salary");
                 satisfaction = (JSONArray) ja2.get("satisfaction");
@@ -208,6 +207,11 @@ public class LoadAPI {
     public ArrayList<String> getBookmark() {
         return bookmark;
     }
+
+    public ArrayList<field> getFields() {
+        return fields;
+    }
+
     public class field implements Comparable{
         String item;
         String data;
