@@ -126,7 +126,7 @@ public class SqlTest
                                 st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
                                 um_index++;
                             } else {
-                                String univ_id = sub_rs.getString("id")
+                                String univ_id = sub_rs.getString("id");
                                 sub_rs = st.executeQuery("select id from university_major where university_id='"+(univ_id)+"' and major_id='"+(api.getMajorSeq())+"';");
 
                                 // case 2: university 테이블에 대학은 있는데 중간테이블엔 major와 연결이 안되어 있을 때
