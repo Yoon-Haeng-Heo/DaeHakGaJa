@@ -18,6 +18,8 @@ public class display {
                 rs = st.executeQuery("select * from Major where id=" + id + ";");
                 
                 if(rs.next()) {
+
+                    // legend 구하기
                     ResultSet sub_rs = null;
                     String legend_id = rs.getString("legend_id");
 
@@ -27,6 +29,7 @@ public class display {
                     if(sub_rs.next()) { legend = sub_rs.getString("name");}
                     String name = rs.getString("name");
 
+                    // bookmark 구하
                     String bookmark = rs.getString("bookmark");
                     bookmark = bookmark.substring(1, bookmark.length()-1);
                     String[] arr = bookmark.split(",");
@@ -35,6 +38,7 @@ public class display {
                         new_bookmark += (i+1)+"순위: "+arr[i]+"\n";
                     }
 
+                    // summary 구하기
                     String summary = rs.getString("summary");
                     int max_width = 50;
                     String new_summary = "";
@@ -44,6 +48,12 @@ public class display {
                         new_summary += summary.substring(start, end)+"\n";
                     }
 
+                    // university 구하기
+                    String university = "";
+                    sub_rs = st.executeQuery("SELECT university.name FROM university INNER JOIN university_major ON university.id = university_major.university_id WHERE university_major.major_id = "+id+";");
+                    while(sub_rs.next()) {
+                        university += sub_rs.getString("name")+" ";
+                    }
                     result = "=================================================================\n" +
                             "[학과명]\n" +
                             name+"\n\n" +
@@ -51,6 +61,8 @@ public class display {
                             legend+"\n\n" +
                             "[직업 선호 가치]\n" +
                             new_bookmark+"\n" +
+                            "[주요 학교]\n" +
+                            university+"\n\n" +
                             "[학과 정보]\n" +
                             new_summary+"\n" +
                             "=================================================================\n";
