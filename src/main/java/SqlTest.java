@@ -155,12 +155,82 @@ public class SqlTest
 
                 System.out.printf("%-12s\n", major_name);
             }
+
+            rs = st.executeQuery("select * from Legend;");
+
+            int um_index = 1;
+            int univ_index = 1;
+            while(rs.next()) {
+                String id = rs.getString(1);
+                String name = rs.getString(2);
+                String array = rs.getString(3);
+                array = array.substring(1, array.length()-1);
+                String[] majorArr = array.split(",");
+                System.out.println("Subject: "+name+"("+id+") start!");
+                for(String majorSeq : majorArr) {
+                    System.out.println("Subject: "+ name+", majorSeq: "+majorSeq);
+                    api = new LoadAPI(id, majorSeq);
+                    if(api.isNull) {
+                        System.out.println(majorSeq+" Skip!!");
+                    } else {
+                        // insert major
+                        System.out.println("Inserting tuples to Major");
+                        for(int a =0;a<api.getFields().size();a++){
+                            System.out.println(api.getFields().get(a).getData() + " " + api.getFields().get(a).getItem());
+                            System.out.println("#########################");
+                        }
+                        st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
+                                Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
+                                "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
+                        // insert chart
+                        // "create table chart(id serial primary key, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer,
+                        // satisfaction_data varchar(10)[], satisfaction_item varchar(30)[], employment_rate decimal, applicant_rate decimal,
+                        // field_data varchar(10)[], field_item varchar(30)[]);\n" +
+                        String insertChart = "insert into chart values(default,'"+Integer.parseInt(api.getMajorSeq()) + "' , '"+api.getMaleRatio() + "' , '" +api.getFemaleRatio()+"', '" + api.getAvg_salary() + "', '"
+                                +ArrayToString(fieldToDataArray(api.getSatisfactions())) + "', '" + ArrayToString(fieldToItemArray(api.getSatisfactions()))+ "' , '"
+                                +api.getEmploymentRate() + "', '"+api.getApplicantRate()+"', '"+ ArrayToString(fieldToDataArray(api.getFields())) + "', '"+ ArrayToString(fieldToItemArray(api.getFields()))+"'); ";
+                        st.executeUpdate(insertChart);
+//                        System.out.println("Chart insert success!!!!!");
+                        // university, university_major 넣는 부분
+                        for (int index = 0; index < api.getUnivArray().size(); index++) {
+                            JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
+                            ResultSet sub_rs = null;
+                            sub_rs = st.executeQuery("SELECT id, name FROM university WHERE name='"+univObject.get("schoolName")+"';");
+
+                            // case 1: university 테이블에 없는 대학교일 때
+                            if (!sub_rs.next()) {
+                                // insert university
+                                st.executeUpdate("insert into university values('"+(univ_index)+"','"+univObject.get("schoolName")+"', '"+ univObject.get("area") +"');");
+                                univ_index++;
+
+                                // insert university_major
+                                st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                um_index++;
+                            } else {
+                                String univ_id = sub_rs.getString("id");
+                                sub_rs = st.executeQuery("select id from university_major where university_id='"+(univ_id)+"' and major_id='"+(api.getMajorSeq())+"';");
+
+                                // case 2: university 테이블에 대학은 있는데 중간테이블엔 major와 연결이 안되어 있을 때
+                                if (!sub_rs.next()) {
+                                    // insert university_major
+                                    st.executeUpdate("insert into university_major values('"+(um_index)+"', '"+(univ_index)+"', '"+(api.getMajorSeq())+"')");
+                                    um_index++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             System.out.println("All done.");
 
         } catch (SQLException sqlEX) {
             System.out.println(sqlEX);
             System.out.println("ERROR!");
         }
+
+        display Display = new display(10145, "major");
+        System.out.println(Display.getResult());
     }
     public static ArrayList<String> fieldToDataArray(ArrayList<LoadAPI.field> al){
         ArrayList<String> returnal = new ArrayList<String>();
