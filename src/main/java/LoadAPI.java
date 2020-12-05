@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,7 +50,7 @@ public class LoadAPI {
     ArrayList<String> popular = new ArrayList<String>();
     ArrayList<String> bookmark = new ArrayList<String>();
     boolean isNull = false;
-
+    ArrayList<field> fields = new ArrayList<field>();
     public LoadAPI(String subject, String majorSeq){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -96,7 +97,14 @@ public class LoadAPI {
                 chartdata = (JSONArray) contentObj.get("chartData");
                 JSONObject ja2 =(JSONObject) chartdata.get(0);
                 gender = (JSONArray) ja2.get("gender");
-
+                JSONArray f = (JSONArray) ja2.get("field");
+                ArrayList<field> aldata = new ArrayList<field>();
+                for(int i = 0 ;i < f.size(); i++){
+                    aldata.add(new field( (String) ((JSONObject) f.get(i)).get("item")  ,
+                            (String)((JSONObject) f.get(i)).get("data") ));
+                }
+                Collections.sort(aldata);
+//                System.out.println(aldata.get(0).getData()+"##################################");
                 avg_salary = (JSONArray) ja2.get("avg_salary");
                 satisfaction = (JSONArray) ja2.get("satisfaction");
                 JSONArray temp = (JSONArray)ja2.get("employment_rate");
@@ -199,6 +207,34 @@ public class LoadAPI {
     }
     public ArrayList<String> getBookmark() {
         return bookmark;
+    }
+    public class field implements Comparable{
+        String item;
+        String data;
+        public field(String item, String data){
+            this.item = item;
+            this.data = data;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            field f = (field)o;
+
+            if(StringToFloat(f.data) < StringToFloat(this.data)) return -1;
+            else if (StringToFloat(f.data) > StringToFloat(this.data)) return 1;
+            return 0;
+        }
+        public float StringToFloat(String str){
+            return Float.parseFloat(str);
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public String getItem() {
+            return item;
+        }
     }
 }
 
