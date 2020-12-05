@@ -50,7 +50,7 @@ public class SqlTest
 
             // create table
             System.out.println("Create relations");
-            String sql = "create table chart(id bigint primary key, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer, satisfaction decimal, employment_rate decimal, applicant_rate decimal);\n" +
+            String sql = "create table chart(id serial primary key, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary decimal, satisfaction_data varchar(10)[], satisfaction_item varchar(30)[], employment_rate decimal, applicant_rate decimal, field_data varchar(10)[], field_item varchar(30)[]);\n" +
                     "create table legend(id bigint primary key, name text, majorSeq bigint[]);\n" +
                     "create table major(id bigint primary key, name text, summary text, main_subject varchar(50)[], job text, legend_id bigint, qualification text, bookmark varchar(10)[]);\n" +
                     "create table university(id bigint primary key, name text, area text);\n" +
@@ -94,10 +94,22 @@ public class SqlTest
                     } else {
                         // insert major
                         System.out.println("Inserting tuples to Major");
+                        for(int a =0;a<api.getFields().size();a++){
+                            System.out.println(api.getFields().get(a).getData() + " " + api.getFields().get(a).getItem());
+                            System.out.println("#########################");
+                        }
                         st.executeUpdate("insert into major (id, name, summary, main_subject, job, legend_id, qualification, bookmark) values('" +
                                 Integer.parseInt(api.getMajorSeq()) + "', '" + api.getMajorName() + "', '" + api.getSummary() + "', '" + ArrayToString(ObjectToArray(api.getMainSubject())) +
                                 "', '" + api.getJob() + "', " + api.getLegendId() + ", '"+ api.getQualification() + "', '" + ArrayToString(api.getBookmark()) +"');");
-
+                        // insert chart
+                        // "create table chart(id serial primary key, major_id bigint, male_ratio decimal, female_ratio decimal, avg_salary integer,
+                        // satisfaction_data varchar(10)[], satisfaction_item varchar(30)[], employment_rate decimal, applicant_rate decimal,
+                        // field_data varchar(10)[], field_item varchar(30)[]);\n" +
+                        String insertChart = "insert into chart values(default,'"+Integer.parseInt(api.getMajorSeq()) + "' , '"+api.getMaleRatio() + "' , '" +api.getFemaleRatio()+"', '" + api.getAvg_salary() + "', '"
+                                +ArrayToString(fieldToDataArray(api.getSatisfactions())) + "', '" + ArrayToString(fieldToItemArray(api.getSatisfactions()))+ "' , '"
+                                +api.getEmploymentRate() + "', '"+api.getApplicantRate()+"', '"+ ArrayToString(fieldToDataArray(api.getFields())) + "', '"+ ArrayToString(fieldToItemArray(api.getFields()))+"'); ";
+                        st.executeUpdate(insertChart);
+                        System.out.println("Chart insert success!!!!!");
                         // university, university_major 넣는 부분
                         for (int index = 0; index < api.getUnivArray().size(); index++) {
                             JSONObject univObject = (JSONObject) api.getUnivArray().get(index);
@@ -134,6 +146,21 @@ public class SqlTest
             System.out.println(sqlEX);
             System.out.println("ERROR!");
         }
+    }
+    public static ArrayList<String> fieldToDataArray(ArrayList<LoadAPI.field> al){
+        ArrayList<String> returnal = new ArrayList<String>();
+        for(int i=0;i<al.size();i++){
+            returnal.add(al.get(i).getData());
+        }
+        return returnal;
+    }
+
+    public static ArrayList<String> fieldToItemArray(ArrayList<LoadAPI.field> al){
+        ArrayList<String> returnal = new ArrayList<String>();
+        for(int i=0;i<al.size();i++){
+            returnal.add(al.get(i).getItem());
+        }
+        return returnal;
     }
     //JSONArray -> ArrayList로
     public static ArrayList<String> ObjectToArray(JSONArray ja){
