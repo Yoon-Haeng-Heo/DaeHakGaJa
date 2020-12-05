@@ -51,6 +51,7 @@ public class LoadAPI {
     ArrayList<String> bookmark = new ArrayList<String>();
     boolean isNull = false;
     ArrayList<field> fields = new ArrayList<field>();
+    ArrayList<field> satisfactions = new ArrayList<field>();
     public LoadAPI(String subject, String majorSeq){
         try {
             StringBuilder urlBuilder = new StringBuilder("http://www.career.go.kr/cnet/openapi/getOpenApi"); /*URL*/
@@ -106,6 +107,10 @@ public class LoadAPI {
 //                System.out.println(aldata.get(0).getData()+"##################################");
                 avg_salary = (JSONArray) ja2.get("avg_salary");
                 satisfaction = (JSONArray) ja2.get("satisfaction");
+                for(int i=0;i<satisfaction.size();i++){
+                    satisfactions.add(new field( (String) ((JSONObject) satisfaction.get(i)).get("item")  ,
+                            (String)((JSONObject) satisfaction.get(i)).get("data") ));
+                }
                 JSONArray temp = (JSONArray)ja2.get("employment_rate");
                 JSONArray tempApplicant = (JSONArray) ja2.get("applicant");
                 if(tempApplicant != null) {
@@ -195,8 +200,15 @@ public class LoadAPI {
         return majorSeq;
     }
     public String getMajorName() { return majorName; }
-    public JSONArray getAvg_salary(){ return avg_salary;}
-    public JSONArray getSatisfaction(){ return satisfaction;}
+    public String getAvg_salary(){
+        return (String)((JSONObject) avg_salary.get(0)).get("data");
+    }
+    //public JSONArray getSatisfaction(){ return satisfaction;}
+
+    public ArrayList<field> getSatisfactions() {
+        return satisfactions;
+    }
+
     public String getEmploymentRate(){ return employmentRate;}
     public float getApplicantRate(){return applicantRate;}
     public JSONArray getEnter_field(){return enter_field;}
