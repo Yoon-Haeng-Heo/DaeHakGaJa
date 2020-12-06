@@ -45,7 +45,6 @@ public class display {
                 for (int i =0; i<(summary.length() / max_width)+1; i++) {
                     int start = i*max_width;
                     int end = (i+1)*max_width < summary.length() ? (i+1)*max_width : summary.length();
-                    if (summary.charAt(start) == ' ') { start += 1; }
                     new_summary += summary.substring(start, end)+"\n";
                 }
 
