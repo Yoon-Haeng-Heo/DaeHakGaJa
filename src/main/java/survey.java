@@ -77,6 +77,7 @@ public class survey {
                 (user_answer[5] == 'a' ? "desc " : "asc ") +
                 "limit 5;";
 
+        System.out.println("\n< USED QUERY >\n");
         System.out.println(result_query);
     }
 

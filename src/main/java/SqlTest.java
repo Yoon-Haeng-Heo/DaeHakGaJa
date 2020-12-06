@@ -148,54 +148,53 @@ public class SqlTest
             // if문
             survey survey = new survey(rs, st);
             String final_query = survey.getResult_query();
-            ArrayList<Integer> majors = new ArrayList<Integer>();
+            ArrayList<Integer> majors_id = new ArrayList<Integer>();
+            ArrayList<String> majors_name = new ArrayList<String>();
             char[] selected_major = new char[1];
+            int major_count = 1;
 
             rs = st.executeQuery(final_query);
 
-            System.out.println("----------------------");
-            System.out.println("name\n");
+            System.out.println("\n\n적성에 맞는 상위 5개 학과의 이름입니다.\n");
 
             while(rs.next()){
-                int count = 1;
                 String major_name = rs.getString(1);
                 int major_id = rs.getShort(2);
 
-                majors.add(major_id);
-                System.out.printf(count + ". %-12s%-10s\n", major_name, major_id);
-                count++;
+                majors_name.add(major_name);
+                majors_id.add(major_id);
             }
 
+
             while(true){
+                int major_index =  1;
                 System.out.println("-------------------------------------------------");
                 System.out.println("| 정보를 확인하고 싶은 학과의 번호를 입력해주세요. (q: 나가기) |");
                 System.out.println("-------------------------------------------------");
+                for(String major_name: majors_name){
+                    System.out.println(major_index + ". " + major_name);
+                    major_index++;
+                }
 
                 selected_major[0] = scan.next().charAt(0);
                 if(selected_major[0] == 'q') break;
                 else if(selected_major[0] == '1' || selected_major[0] == '2' || selected_major[0] == '3' ||
                 selected_major[0] == '4' || selected_major[0] == '5'){
-                    display Display = new display(majors.get(selected_major[0] - '1'));
+                    display Display = new display(majors_id.get(selected_major[0] - '1'));
+                    System.out.println(Display.getResult());
+                }
+                else{
+                    System.out.println("올바른 값을 입력해주세요.");
                 }
             }
 
-            System.out.println("지금부터 ArrayList 출력");
-            for(String major:majors){
-                System.out.println(major);
-            }
-            System.out.println("인덱스 접근해서 출력 -------------\n");
-            System.out.println(majors.get(2));
-            System.out.println(majors.get(3));
-            System.out.println(majors.get(4));
-            System.out.println("All done.");
+            System.out.println("서비스를 이용해주셔서 감사합니다.");
 
         } catch (SQLException sqlEX) {
             System.out.println(sqlEX);
             System.out.println("ERROR!");
         }
 
-        display Display = new display(10145, "chart");
-        System.out.println(Display.getResult());
     }
     public static ArrayList<String> fieldToDataArray(ArrayList<LoadAPI.field> al){
         ArrayList<String> returnal = new ArrayList<String>();
