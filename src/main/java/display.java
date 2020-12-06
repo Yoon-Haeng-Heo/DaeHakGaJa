@@ -93,19 +93,17 @@ public class display {
                     String satisfaction_data = rs.getString("satisfaction_data");
                     String satisfaction_item = rs.getString("satisfaction_item");
 
-                    satisfaction_data.substring(1, satisfaction_data.length()-1);
-                    satisfaction_item.substring(1, satisfaction_item.length()-1);
+                    satisfaction_data = satisfaction_data.substring(1, satisfaction_data.length()-1);
+                    satisfaction_item = satisfaction_item.substring(1, satisfaction_item.length()-1);
 
                     String[] data_arr = satisfaction_data.split(",");
                     String[] item_arr = satisfaction_item.split(",");
                     String satisfaction = "";
-                    for (int i = 0; i < item_arr.length; i++) {
-                        satisfaction += item_arr[i]+"\t";
+                    for (int i = item_arr.length-1; i >= 0; i--) {
+                        if (item_arr[i].indexOf("\"") != -1) { item_arr[i] = item_arr[i].substring(1, item_arr[i].length()-1); }
+                        satisfaction += item_arr[i]+"("+data_arr[i]+"%) ";
                     }
-                    satisfaction += "\n";
-                    for (int i = 0; i < data_arr.length; i++) {
-                        satisfaction += data_arr[i]+"\t";
-                    }
+                    satisfaction +="\n";
 
                     // employment
                     String employment_rate = rs.getString("employment_rate");
@@ -117,36 +115,30 @@ public class display {
                     String field_data = rs.getString("field_data");
                     String field_item = rs.getString("field_item");
 
-                    field_data.substring(1, field_data.length()-1);
-                    field_item.substring(1, field_item.length()-1);
+                    field_data = field_data.substring(1, field_data.length()-1);
+                    field_item = field_item.substring(1, field_item.length()-1);
 
                     String[] data_arr_2 = field_data.split(",");
                     String[] item_arr_2 = field_item.split(",");
                     String field = "";
                     for (int i = 0; i < item_arr_2.length; i++) {
-                        field += item_arr_2[i]+"\t";
+                        field += item_arr_2[i]+"("+data_arr_2[i]+"%) ";
                     }
-                    field += "\n";
-                    for (int i = 0; i < data_arr_2.length; i++) {
-                        field += data_arr_2[i]+"\t";
-                    }
+                    field +="\n";
 
                     result = "=================================================================\n" +
-                            "[학과명]\n" +
-                           major+"\n\n" +
                             "[남여 비율]\n" +
-                            "  남  /  여  \n" +
-                            male_ratio+" / "+female_ratio+"\n\n" +
+                            "남("+male_ratio+"%) 여("+female_ratio+"%)\n\n" +
                             "[경쟁률]\n" +
                             Math.round(applicant_rate*100)/100.0+":1\n\n" +
                             "[취업률]\n" +
-                            employment_rate+"\n\n" +
+                            employment_rate+"%\n\n" +
                             "[신입 평균 월급]\n" +
-                            avg_salary+" 만원\n\n" +
+                            "약 "+avg_salary+"만원\n\n" +
                             "[만족도]\n" +
-                            satisfaction+"\n\n" +
+                            satisfaction+"\n" +
                             "[취업 분야]\n" +
-                            field+"\n\n" +
+                            field+"\n" +
                             "=================================================================\n";
                 }
             }
@@ -155,7 +147,5 @@ public class display {
             System.out.println("ERROR!");
         }
     }
-
     public String getResult() { return result; }
-
 }
