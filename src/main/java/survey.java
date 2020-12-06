@@ -42,7 +42,9 @@ public class survey {
         answer[5][1] = "a) 워라밸";
         answer[5][2] = "b) 임금";
 
+        System.out.println("");
         for(int question_index=1; question_index<=5; question_index++){
+            System.out.println("");
             System.out.println(question[question_index]);
             for(int answer_index=1; answer_index<=2; answer_index++){
                 System.out.println(answer[question_index][answer_index]);

@@ -29,7 +29,7 @@ public class SqlTest
 
             if (rs.next()) System.out.println(rs.getString(1));
 
-            System.out.println("Career Net에서 최신 정보를 Load 할까요? (약 20분 소요)");
+            System.out.println("\nCareer Net에서 최신 정보를 Load 할까요? (약 20분 소요)");
             System.out.println("y/n (소문자로 입력해주세요.)");
             if(scan.next().charAt(0) == 'y'){
                 reload_db_flag = true;
