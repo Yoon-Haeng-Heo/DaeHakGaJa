@@ -57,7 +57,7 @@ public class survey {
                 System.out.println("올바른 값을 입력해주세요.");
             }
         }
-        result_query = "select major.name " +
+        result_query = "select major.name, major.id " +
                 "from major, chart " +
                 "where legend_id in " +
                 (user_answer[1] == 'a' ? "(100394, 100395, 100396) " : "(100391, 100392, 100393, 100397) " ) +
@@ -74,7 +74,8 @@ public class survey {
                 "chart.avg_salary " +
                 (user_answer[5] == 'a' ? "asc, " : "desc, ") +
                 "satisfaction_data[4]::numeric + satisfaction_data[5]::numeric " +
-                (user_answer[5] == 'a' ? "desc;" : "asc;");
+                (user_answer[5] == 'a' ? "desc " : "asc ") +
+                "limit 5;";
 
         System.out.println(result_query);
     }

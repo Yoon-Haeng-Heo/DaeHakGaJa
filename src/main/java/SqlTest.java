@@ -148,6 +148,8 @@ public class SqlTest
             // if문
             survey survey = new survey(rs, st);
             String final_query = survey.getResult_query();
+            ArrayList<Integer> majors = new ArrayList<Integer>();
+            char[] selected_major = new char[1];
 
             rs = st.executeQuery(final_query);
 
@@ -155,10 +157,36 @@ public class SqlTest
             System.out.println("name\n");
 
             while(rs.next()){
+                int count = 1;
                 String major_name = rs.getString(1);
-                System.out.printf("%-12s\n", major_name);
+                int major_id = rs.getShort(2);
+
+                majors.add(major_id);
+                System.out.printf(count + ". %-12s%-10s\n", major_name, major_id);
+                count++;
             }
 
+            while(true){
+                System.out.println("-------------------------------------------------");
+                System.out.println("| 정보를 확인하고 싶은 학과의 번호를 입력해주세요. (q: 나가기) |");
+                System.out.println("-------------------------------------------------");
+
+                selected_major[0] = scan.next().charAt(0);
+                if(selected_major[0] == 'q') break;
+                else if(selected_major[0] == '1' || selected_major[0] == '2' || selected_major[0] == '3' ||
+                selected_major[0] == '4' || selected_major[0] == '5'){
+                    display Display = new display(majors.get(selected_major[0] - '1'));
+                }
+            }
+
+            System.out.println("지금부터 ArrayList 출력");
+            for(String major:majors){
+                System.out.println(major);
+            }
+            System.out.println("인덱스 접근해서 출력 -------------\n");
+            System.out.println(majors.get(2));
+            System.out.println(majors.get(3));
+            System.out.println(majors.get(4));
             System.out.println("All done.");
 
         } catch (SQLException sqlEX) {
